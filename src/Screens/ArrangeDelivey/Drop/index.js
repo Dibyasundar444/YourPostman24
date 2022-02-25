@@ -106,12 +106,14 @@ const styles = StyleSheet.create({
         height: 60,
         fontSize:16,
         marginRight:50,
-        paddingLeft:10
+        paddingLeft:10,
+        color:"#000"
     },
     input1: {
         height: 60,
         fontSize: 16,
-        width: width/2.2
+        width: width/2.2,
+        color:"#000"
     },
     map: {
         width: width,

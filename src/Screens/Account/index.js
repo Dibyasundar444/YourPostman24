@@ -155,7 +155,7 @@ export default function Account({navigation,route}) {
                                     :
                                     item.id == 3 ? <MaterialCommunityIcons name="email" size={24} color="#fdb915" />
                                     :
-                                    item.id == 4 ? <Foundation name="clipboard-notes" size={24} color="#fdb915" />
+                                    item.id == 4 ? <Foundation name="clipboard-notes" size={24} color="#fdb915" style={{marginLeft:5}} />
                                     :
                                     item.id == 5 ? <MaterialIcons name="alt-route" size={24} color="#fdb915" />
                                     :

@@ -12,11 +12,11 @@ export default function Modal({imgSrc,type,status,price,sender,receiver,date,tim
                     <Image source={imgSrc} style={{width:40,height:40}} />
                 </View>
                 <View style={{marginLeft:10}}>
-                    <Text style={{fontSize:14,fontWeight:"bold"}}>{type}</Text>
+                    <Text style={{fontSize:14,fontWeight:"500",color:"#000"}}>{type}</Text>
                     <Text style={{color:"gray"}}>{date}, {time}</Text>
                 </View>
                 <View style={styles.view1_3}>
-                    <Text style={{fontSize:12,color:"#fdb915",}}>{status}</Text>
+                    <Text style={{fontSize:11,color:"#fdb915"}}>{status}</Text>
                     <Text style={{right:-40,fontSize:12,color:"gray"}}>₹ {price}</Text>
                 </View>
             </View>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderRadius: 10,
         height: 120,
-        marginHorizontal:10
+        marginHorizontal:15
     },
     view1: {
         flexDirection:"row",

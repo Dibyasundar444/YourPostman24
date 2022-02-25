@@ -43,7 +43,8 @@ function Home({ navigation }) {
               resizeMode="contain"
               style={styles.image4}
             ></Image>
-            <TouchableOpacity style={styles.button2} onPress={()=>navigation.navigate("ArrangeDelivery")} activeOpacity={0.8}>
+            <TouchableOpacity style={styles.button2} 
+            onPress={()=>navigation.navigate("ArrangeDelivery")} activeOpacity={0.8}>
               <View style={styles.image5Row}>
                 <Image
                   source={require("../assets/image/home1.png")}
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     left: 0,
   },
   button2: {
-    top: 278,
+    top: 290,
     left: 15,
     // width: 345,
     // height: 100,

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableOpacity, ActivityIndicator } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -15,8 +15,11 @@ const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 
 
-export default function ConfirmInfoScreen({onSubmit,delMode,setDelMode,sLocation,rLocation,
-    courierType,secured,cHeight,cInfo,cLength,cWidth,cWeight,rName,usualRate,fastDel_Rate,superFastDel_rate}){
+export default function ConfirmInfoScreen(
+    {onSubmit,delMode,setDelMode,sLocation,rLocation,
+    courierType,secured,cHeight,cInfo,cLength,cWidth,cWeight,
+    rName,usualRate,fastDel_Rate,superFastDel_rate,INDICATOR,sName}
+    ){
 
     const refRBSheet = useRef();
     const navigation = useNavigation();
@@ -33,7 +36,7 @@ export default function ConfirmInfoScreen({onSubmit,delMode,setDelMode,sLocation
                     </View>
                     <View style={{marginLeft:30}}>
                         <Text style={{color:"gray"}}>Walmart</Text>
-                        <Text style={{fontSize:18,color:"#000"}}>Emili Williamson</Text>
+                        <Text style={{fontSize:15,color:"#000"}}>{sName}</Text>
                         <Text style={{fontSize:15,color:"#000"}}>{sLocation}</Text>
                     </View>
                 </View>
@@ -43,7 +46,7 @@ export default function ConfirmInfoScreen({onSubmit,delMode,setDelMode,sLocation
                     </View>
                     <View style={{marginLeft:30}}>
                         <Text style={{color:"gray"}}>City Garden</Text>
-                        <Text style={{fontSize:18,color:"#000"}}>{rName}</Text>
+                        <Text style={{fontSize:15,color:"#000"}}>{rName}</Text>
                         <Text style={{fontSize:15,color:"#000"}}>{rLocation}</Text>
                     </View>
                 </View>
@@ -133,11 +136,15 @@ export default function ConfirmInfoScreen({onSubmit,delMode,setDelMode,sLocation
                     <Text style={{fontSize:18,color:"#000"}}>Delivery</Text>
                 </View>
             </TouchableOpacity>
-            <View style={{alignItems:"flex-end"}}>
-                <TouchableOpacity style={styles.proceed} onPress={onSubmit}>
-                    <Text style={{color:"#fff",fontSize:16}}>Proceed to payment</Text>
-                </TouchableOpacity>
-            </View>
+            {
+                INDICATOR ? <ActivityIndicator style={{marginTop:10}} size={30} />
+                :
+                <View style={{alignItems:"flex-end"}}>
+                    <TouchableOpacity style={styles.proceed} onPress={onSubmit}>
+                        <Text style={{color:"#fff",fontSize:16}}>Proceed to payment</Text>
+                    </TouchableOpacity>
+                </View>
+            }
         </ScrollView>
     );
 };

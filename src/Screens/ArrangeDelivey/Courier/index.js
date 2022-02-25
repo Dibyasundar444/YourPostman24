@@ -73,7 +73,7 @@ export default function CourierScreen({cType,setCType,Height, setHeight,Width, s
                             <TextInput 
                                 placeholder="0.0 cm"
                                 placeholderTextColor="#000"
-                                style={{borderRadius:5,width:60,paddingLeft:5}}
+                                style={{borderRadius:5,width:60,paddingLeft:5,color:"#000"}}
                                 value={Height}
                                 onChangeText={(value)=>setHeight(value)}
                                 keyboardType="numeric"
@@ -90,7 +90,7 @@ export default function CourierScreen({cType,setCType,Height, setHeight,Width, s
                             <TextInput 
                                 placeholder="0.0 cm"
                                 placeholderTextColor="#000"
-                                style={{borderRadius:5,width:60,paddingLeft:5}}
+                                style={{borderRadius:5,width:60,paddingLeft:5,color:"#000"}}
                                 value={Width}
                                 onChangeText={(value)=>setWidth(value)}
                                 keyboardType="numeric"
@@ -107,7 +107,7 @@ export default function CourierScreen({cType,setCType,Height, setHeight,Width, s
                             <TextInput 
                                 placeholder="0.0 cm"
                                 placeholderTextColor="#000"
-                                style={{borderRadius:5,width:60,paddingLeft:5}}
+                                style={{borderRadius:5,width:60,paddingLeft:5,color:"#000"}}
                                 value={Length}
                                 onChangeText={(value)=>setLength(value)}
                                 keyboardType="numeric"
@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
         borderRadius:5,
         paddingHorizontal:10,
         width:100,
+        color:"#000"
     }
   });
   

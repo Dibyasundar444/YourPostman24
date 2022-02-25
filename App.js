@@ -11,7 +11,7 @@ import Home from "./src/Screens/HomeScreen";
 import Verification from "./src/Screens/Verification";
 import ArrangeDelivery from "./src/Screens/ArrangeDelivey";
 import Account from "./src/Screens/Account";
-// import ProfileScreen from "./src/Screens/Account/screens/ProfileScreen";
+import ProfileScreen from "./src/Screens/Account/screens/ProfileScreen";
 import AddressScreen from "./src/Screens/Account/screens/SavedAddress";
 import LanguageScreen from "./src/Screens/Account/screens/LanguageScreen";
 import ContactScreen from "./src/Screens/Account/screens/ContactScreen";
@@ -21,6 +21,7 @@ import MyMap from "./src/Screens/ArrangeDelivey/Confirm/Map";
 import RateCalculator from "./src/Screens/Account/screens/RateCalculatorScreen";
 import MyDeliveries from "./src/Screens/MyDelivery";
 import OrderDetailsScreen from "./src/Screens/MyDelivery/component/OrderDetailsScreen";
+import SplashScreen from "./src/Screens/SplashScreen";
 
 
 export default function App(){
@@ -51,7 +52,7 @@ export default function App(){
   };
 
   if(!appIsReady){
-    return <ActivityIndicator />
+    return <SplashScreen />
   };
 
   return (
@@ -64,7 +65,7 @@ export default function App(){
           <Stack.Screen name="verification" component={Verification} />
           <Stack.Screen name="ArrangeDelivery" component={ArrangeDelivery} />
           <Stack.Screen name="Account" component={Account} />
-          {/* <Stack.Screen name="Profile" component={ProfileScreen} /> */}
+          <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="Adresses" component={AddressScreen} />
           <Stack.Screen name="Language" component={LanguageScreen} />
           <Stack.Screen name="Contact" component={ContactScreen} />

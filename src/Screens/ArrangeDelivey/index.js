@@ -39,8 +39,9 @@ export default function ArrangeDelivery({navigation}){
     const [Price, setPrice] = useState("");
     const [Info, setInfo] = useState("");
     const [delMode, setDelMode] = useState("Usual");
-    const [token, setToken] = useState("");
+    const [userData, setUserData] = useState({});
     const [indicator1, setIndicator1] = useState(false);
+    const [indicator2, setIndicator2] = useState(false);
     const [usualRate, setUsualRate] = useState("");
     const [fastDel_Rate, setFastDel_Rate] = useState("");
     const [superFastDel_rate, setSuperFastDel_rate] = useState("");
@@ -50,9 +51,10 @@ export default function ArrangeDelivery({navigation}){
     useEffect(() => {
         AsyncStorage.getItem('jwt').then(resp => {
             if(resp !== null ){
-                const parsed = JSON.parse(resp).access_token;
-                setToken(parsed);
+                const parsed = JSON.parse(resp);
+                setUserData(parsed);
             } else {
+                setUserData({});
                 console.log("token not found");
             }
         }).catch(err => console.log(err));
@@ -61,7 +63,7 @@ export default function ArrangeDelivery({navigation}){
     let axiosConfig = {
         headers: {
             'Content-Type': 'application/json;charset=UTF-8',
-            "Authorization": token,
+            "Authorization": userData.access_token,
         }
     };
     const postData={
@@ -88,14 +90,17 @@ export default function ArrangeDelivery({navigation}){
         if(slocation=="" || rlocation=="" || Height=="" || width=="" || Length=="" || Weight=="" || Price=="" || Price==0){
             alert("please enter the details");
         } else {
-            axios.post(`${API}/product`,postData,axiosConfig)
+            setIndicator2(true);
+            axios.post(`${API}/api/product`,postData,axiosConfig)
             .then(res=>{
-                if(res.status==200){
-                    // console.log(postData);
-                    navigation.navigate("payment",navigateData);
-                } else console.log(res.status);               
+                setIndicator2(false);
+                console.log(res.data);
+                navigation.navigate("payment",navigateData);              
             })
-            .catch(e=>console.log(e))
+            .catch(e=>{
+                console.log(e);
+                setIndicator2(false);
+            })
         }
     };
 
@@ -110,13 +115,14 @@ export default function ArrangeDelivery({navigation}){
             "width": Number(width),
             "length": Number(Length)
         };
-        axios.post(`${API}/ratecalc`,body,axiosConfig)
+        axios.post(`${API}/api/ratecalc`,body,axiosConfig)
         .then(resp=>{
             setUsualRate(resp.data);
             setIndicator1(false);
             segmentClicked(3);
         })
         .catch(err=>{
+            setIndicator1(false);
             console.log("error from server: ",err);
         })
     };
@@ -186,6 +192,8 @@ export default function ArrangeDelivery({navigation}){
                     cWeight={Weight}
                     rName={rname}
                     usualRate={usualRate}
+                    INDICATOR={indicator2}
+                    sName={userData.user.name}
                 />
             )
         }

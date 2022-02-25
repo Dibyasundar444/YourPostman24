@@ -37,7 +37,6 @@ LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function ProfileScreen({ navigation, route }) {
   const navigateData = route.params;
-  // console.log(navigateData);
 
   const [image, setImage] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -45,6 +44,9 @@ export default function ProfileScreen({ navigation, route }) {
   const [edit, setEdit] = useState(false);
   const [success, setSuccess] = useState(false);
   const [token, setToken] = useState(null);
+  const [processRate, setProcessRate] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(()=>{
     user();
@@ -71,21 +73,29 @@ export default function ProfileScreen({ navigation, route }) {
   };
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-      setEdit(true);
-      setVisible(false);
-    }
+    const options = {
+      storageOptions: {
+          path: 'images',
+          mediaType: 'photo'
+      },
+      includeBase64: true
+    };
+      launchImageLibrary(options, resp => {
+          if(resp.didCancel){
+              console.log("Canceled");
+              setVisible(false);
+          }
+          else if(resp.error){
+              console.log("Error: ", resp.error);
+              setVisible(false);
+          }
+          else{
+              const imgData = resp.assets[0];
+              setImage(imgData);
+              setEdit(true);
+              setVisible(false);
+          }
+      })
   };
 
 
@@ -109,20 +119,23 @@ export default function ProfileScreen({ navigation, route }) {
           else{
               const imgData = resp.assets[0];
               setImage(imgData);
+              setEdit(true);
+              setVisible(false);
           }
       })
   };
 
   const update = async () => {
-    setIndicator2(true);
+    setUploading(true);
     try{
         const task = storage()
-        .ref("USER/profile_image/"+ imgData.fileName)
-        .putString(imgData.base64,"base64");
+        .ref("USER/profile_image/"+ image.fileName)
+        .putString(image.base64,"base64");
         task.on('state_changed',
             function(snapshot){
                 const rate = Math.floor((snapshot.bytesTransferred/snapshot.totalBytes)*100);
-                // setProcess(`${rate}%`);
+                setProcessRate(`${rate}%`);
+                setProcessing(true);
                 console.log(rate);
             },
             function(err){
@@ -130,19 +143,22 @@ export default function ProfileScreen({ navigation, route }) {
             },
             function(){
                 task.snapshot.ref.getDownloadURL().then(function(url){
-                  setUploading(false);
-                  setSuccess(true);
                   let axiosConfig = {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8',
                         "Authorization": token
                     }
                   };
-                  axios.patch(`${API}/update`,{profileImg:url},axiosConfig)
+                  axios.patch(`${API}/user/update`,{profileImg:url},axiosConfig)
                   .then(res=>{
                     console.log(res.data);
+                    setUploading(false);
+                    setSuccess(true);
+                    setError(false);
                   })
                   .catch(err=>{
+                    setError(true);
+                    setUploading(false);
                     console.log("err", err);
                   })
                   return url;
@@ -151,8 +167,7 @@ export default function ProfileScreen({ navigation, route }) {
         );                  
         task.then(() => {
             console.log('PDF uploaded to the bucket!');
-            setIndicator2(false);
-            setIsUploaded(true);
+            setProcessing(false);
         });               
     }
     catch(e){
@@ -164,8 +179,13 @@ export default function ProfileScreen({ navigation, route }) {
   if (success) {
     setTimeout(() => {
       setSuccess(false);
-    }, 3500);
-  }
+    }, 4500);
+  };
+  if (error) {
+    setTimeout(() => {
+      setError(false);
+    }, 4500);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -214,7 +234,7 @@ export default function ProfileScreen({ navigation, route }) {
               <Image
                 style={styles.profile}
                 source={
-                  image ? { uri: image } : { uri: navigateData.profileImg }
+                  image ? { uri: image.uri } : { uri: navigateData.profileImg }
                 }
               />
             ) : (
@@ -222,7 +242,7 @@ export default function ProfileScreen({ navigation, route }) {
                 style={styles.profile}
                 source={
                   image
-                    ? { uri: image }
+                    ? { uri: image.uri }
                     : require("../../../assets/image/Profile.png")
                 }
               />
@@ -297,6 +317,13 @@ export default function ProfileScreen({ navigation, route }) {
         </View>
         {edit ? (
           <View style={{ alignItems: "center", marginTop: 40 }}>
+            {
+              processing ? 
+              <Text style={{color:"gray",textAlign:"center",marginBottom:10}}>
+                Uploading {processRate}
+              </Text> 
+              : null
+            }
             <TouchableOpacity
               style={{
                 justifyContent: "center",
@@ -314,11 +341,19 @@ export default function ProfileScreen({ navigation, route }) {
                 <Text style={{ color: "#fff" }}>Update</Text>
               )}
             </TouchableOpacity>
-            {success ? (
-              <Text style={{ color: "green", fontSize: 12, marginTop: 20 }}>
-                Updated successfully
-              </Text>
-            ) : null}
+            {success ? 
+              (
+                <Text style={{ color: "green", fontSize: 12, marginTop: 20 }}>
+                  Updated successfully
+                </Text>
+              ) : 
+              error ? 
+              (
+                <Text style={{ color: "red", fontSize: 12, marginTop: 20 }}>
+                  Update failed
+                </Text>
+              ) :
+            null}
           </View>
         ) : null}
       </View>
@@ -360,17 +395,20 @@ const styles = StyleSheet.create({
     // marginTop:20
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
+    color:"#000"
   },
   subTitle: {
     fontSize: 16,
     marginTop: 10,
+    color:"#000"
   },
   line: {
     borderWidth: 1,
     marginTop: 15,
     marginRight: 20,
     borderColor: "#fdb915",
+    marginBottom: 20
   },
   edit: {
     position: "absolute",
