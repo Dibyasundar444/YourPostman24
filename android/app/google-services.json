@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "202559572327",
+    "project_id": "yourpostman24-3f8e2",
+    "storage_bucket": "yourpostman24-3f8e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202559572327:android:31d9bce09be0a1634dc7c2",
+        "android_client_info": {
+          "package_name": "com.yourpostman24"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202559572327-smcn4hu0q52las72c6kkg2vtvbr5hc9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqdWPrZx49-zR_teTn08cOWm3de9z51gw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202559572327-smcn4hu0q52las72c6kkg2vtvbr5hc9n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
