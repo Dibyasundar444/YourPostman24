@@ -21,8 +21,9 @@ import { API } from "../../config";
 
 const { height } = Dimensions.get("window");
 
-export default function ArrangeDelivery({navigation}){
+export default function ArrangeDelivery({navigation,route}){
 
+    const preData = route.params;
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [rname, setRname] = useState("");
@@ -45,27 +46,58 @@ export default function ArrangeDelivery({navigation}){
     const [usualRate, setUsualRate] = useState("");
     const [fastDel_Rate, setFastDel_Rate] = useState("");
     const [superFastDel_rate, setSuperFastDel_rate] = useState("");
+    const [homeAddress, setHomeAddress] = useState({});
+    const [officeAddress, setOfficeAddress] = useState({});
+    const [otherAddress, setOtherAddress] = useState({});
+    const [senderGEO,setSenderGEO] = useState({});
+    const [receiverGEO,setReceiverGEO] = useState({});
 
     //<---------------------------
 
     useEffect(() => {
-        AsyncStorage.getItem('jwt').then(resp => {
-            if(resp !== null ){
-                const parsed = JSON.parse(resp);
-                setUserData(parsed);
-            } else {
-                setUserData({});
-                console.log("token not found");
-            }
-        }).catch(err => console.log(err));
+        isUser();
     }, []);
 
-    let axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Authorization": userData.access_token,
+
+    const isUser = async() => {
+        try {
+            let userData = await AsyncStorage.getItem('jwt');         
+            let data = JSON.parse(userData);
+            if(data !== null){
+                setUserData(data);
+            }else{
+                setUserData({});
+            }
+            let HOME = await AsyncStorage.getItem('Home');
+            let parsedHome = JSON.parse(HOME);
+            if(parsedHome !== null){
+                setHomeAddress(parsedHome);
+            }
+            else{
+                setHomeAddress({})
+            }
+            let OFFICE = await AsyncStorage.getItem('Office');
+            let parsedOffice = JSON.parse(OFFICE);
+            if(parsedOffice !== null){
+                setOfficeAddress(parsedOffice);
+            }
+            else{
+                setOfficeAddress({});
+            }
+            let OTHER = await AsyncStorage.getItem('Others');
+            let parsedOther = JSON.parse(OTHER);
+            if(parsedOther !== null){
+                setOtherAddress(parsedOther);
+            }
+            else{
+                setOtherAddress({});
+            }
+        } catch(e) {
+          console.log("Error while accessing storage: ",e);
         }
     };
+
+
     const postData={
         "addresstodeli": rlocation,
         "SedndingAddress": slocation,
@@ -77,7 +109,15 @@ export default function ArrangeDelivery({navigation}){
         "secureProduct": switchValue,
         "CourierInfo": Info,
         "deliveryMode": delMode,
-        "Price": Number(Price)
+        "Price": Number(usualRate)
+    };
+
+
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Authorization": userData.access_token,
+        }
     };
 
     const navigateData={
@@ -85,17 +125,23 @@ export default function ArrangeDelivery({navigation}){
         rlocation: rlocation,
         sname: "",
         rname: rname,
-    }
+        price: usualRate
+    };
+    
     const onSubmit=()=>{
-        if(slocation=="" || rlocation=="" || Height=="" || width=="" || Length=="" || Weight=="" || Price=="" || Price==0){
+        if(slocation=="" || rlocation=="" || 
+            Height=="" || width=="" || 
+            Length=="" || Weight=="" || 
+            Price=="" || Price==0
+        ){
             alert("please enter the details");
         } else {
             setIndicator2(true);
-            axios.post(`${API}/api/product`,postData,axiosConfig)
+            axios.post(`${API}/api/createorder`,postData,axiosConfig)
             .then(res=>{
                 setIndicator2(false);
                 console.log(res.data);
-                navigation.navigate("payment",navigateData);              
+                navigation.navigate("PaymentMethod",{Order:res.data,price:usualRate,user: preData});              
             })
             .catch(e=>{
                 console.log(e);
@@ -137,6 +183,10 @@ export default function ArrangeDelivery({navigation}){
                     activeIndex={activeAddress}
                     setActiveIndex={setActiveAddress}
                     next={()=>segmentClicked(1)}
+                    HOME={homeAddress.homeAddress}
+                    OFFICE={officeAddress.officeAddress}
+                    OTHER={otherAddress.otherAddress}
+                    SET_LAT_LONG={setSenderGEO}
                 />
             )
         } else if(activeIndex==1){
@@ -149,6 +199,7 @@ export default function ArrangeDelivery({navigation}){
                     setName={setRname}
                     setNumber={setRnumber}
                     next={()=>segmentClicked(2)}
+                    SET_LAT_LONG={setReceiverGEO}
                 />
             )
         } else if(activeIndex==2){

@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     view2_1_2: {
         flexDirection:"row",
         alignItems:"center",
-        marginRight: -30
+        // marginRight: -30
     },
     dotLine: {
         marginHorizontal:10,

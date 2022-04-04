@@ -5,32 +5,49 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useIsFocused } from '@react-navigation/native';
 
 import { constData } from './Data.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const {height} = Dimensions.get("window");
+
+const { height } = Dimensions.get("window");
 
 export default function Account({navigation,route}) {
-    // console.log(Data);
+
     const [index, setIndex] = useState(0);
     const [points, setPoints] = useState("10");
     const [userData, setUserData] = useState({name:"",profileImg:"qwe",email:"",phone:""});
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // const navigateData = route.params;
+    const isFocused = useIsFocused();
 
     useEffect(() => {
-        AsyncStorage.getItem('jwt').then(resp => {
-            if(resp !== null ){
-                const parsed = JSON.parse(resp).user;
-                // const parsed = JSON.parse(resp);
-                console.log("parsed",parsed);
-                setUserData({name:parsed.name, profileImg:parsed.profileImg,email:parsed.email,phone:parsed.phoneNo})
-            } else {
-                return null;
-            }
-        }).catch(err => console.log(err));
-    }, []);
+        if(isFocused){
+            getUser();
+        }
+        isSignedIn();
+    }, [isFocused]);
+
+    const getUser=async()=>{
+        try{
+            const DATA = await AsyncStorage.getItem('jwt');
+            let parsed = JSON.parse(DATA).user;
+            parsed !== null ? 
+            setUserData({name:parsed.name, profileImg:parsed.profileImg,email:parsed.email,phone:parsed.phoneNo})
+            :
+            setUserData({});
+        }
+        catch(err){
+            console.log(err);
+        };
+    };
+
+    const isSignedIn = async () => {
+        const signedIn = await GoogleSignin.isSignedIn();
+        setIsLoggedIn(signedIn);
+    };
 
     const navigateData={
         "name": userData.name,
@@ -78,7 +95,17 @@ export default function Account({navigation,route}) {
     };
     const clickLogOut = async () => {
         await AsyncStorage.removeItem('jwt');
-        navigation.navigate("sign");
+        if(isLoggedIn){
+            try {
+                GoogleSignin.configure({
+                    androidClientId: '564858245446-uv4sn6c7t28qtj6f0pajnstvnboksmik.apps.googleusercontent.com',
+                  });
+                await GoogleSignin.signOut();
+            } catch (error) {
+            console.error(error);
+            }
+        }
+        navigation.navigate("Login");
     };
     const onShare = async () => {
         try {
@@ -104,14 +131,24 @@ export default function Account({navigation,route}) {
             <View style={styles.subView1}>            
                 <View style={{flexDirection:"row",justifyContent:"space-between"}}>
                     <Text style={styles.subView1_text1}>Account</Text>
-                    <TouchableOpacity
-                     style={{marginRight:20,alignItems:"center"}}
-                        activeOpacity={0.7}
-                        onPress={()=>alert("coming soon")} 
-                    >
-                        <Image source={require('../../assets/image/Wallet.jpg')} style={{bottom:-3}} />
+                    <View style={{alignItems:"center",marginRight:20}}>
+                        <TouchableOpacity
+                        style={{
+                            alignItems:"center",
+                            backgroundColor:"#fff",
+                            borderRadius:60,
+                            justifyContent:"center",
+                            elevation:5,
+                            height:40,
+                            width:40
+                            }}
+                            activeOpacity={0.7}
+                            onPress={()=>alert("coming soon")} 
+                        >
+                            <Image source={require('../../assets/image/Wallet.jpg')} style={{}} />
+                        </TouchableOpacity>
                         <Text style={{color:"#fff",fontSize:10}}>{points}</Text>
-                    </TouchableOpacity>
+                    </View>
                 </View>
                 <TouchableOpacity style={styles.subView1_1} onPress={()=>navigation.navigate("Profile",navigateData)}>
                     {
@@ -207,7 +244,7 @@ const styles = StyleSheet.create({
     view2: {
         borderTopLeftRadius: 35,
         // borderWidth:1,
-        marginTop: -30,
+        marginTop: -20,
         backgroundColor:"#fff"
     },
     subView2: {

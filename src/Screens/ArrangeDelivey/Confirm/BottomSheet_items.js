@@ -19,7 +19,7 @@ export default function BottmSheet_item({delMode,setDelMode,closeSheet,usualRate
             <View style={{flex:1}}>
                 <Text style={styles.view1}>Select Delivery Mode</Text>
                 <View style={styles.view2}>
-                    <TouchableOpacity style={styles.view2_1} active={delMode=="Usual"} onPress={()=>segmentClicked("Usual")} activeOpacity={0.6}>
+                    <TouchableOpacity style={styles.view2_1} onPress={()=>segmentClicked("Usual")} activeOpacity={0.6}>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <FontAwesome name={delMode==="Usual" ? "dot-circle-o":"circle-thin"} size={26} color="#fdb915" />
                             <View style={{flexWrap:"wrap",marginLeft:30}}>
@@ -30,7 +30,7 @@ export default function BottmSheet_item({delMode,setDelMode,closeSheet,usualRate
                         </View>
                         <Text style={styles.price}>₹{price1}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.view2_1} active={delMode=="Fast"} onPress={()=>segmentClicked("Fast")} activeOpacity={0.6}>
+                    <TouchableOpacity style={styles.view2_1} onPress={()=>segmentClicked("Fast")} activeOpacity={0.6}>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <FontAwesome name={delMode=="Fast" ? "dot-circle-o":"circle-thin"} size={26} color="#fdb915" />
                             <View style={{flexWrap:"wrap",marginLeft:30}}>
@@ -40,7 +40,7 @@ export default function BottmSheet_item({delMode,setDelMode,closeSheet,usualRate
                         </View>
                         <Text style={styles.price}>₹{price2}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.view2_1} active={delMode=="Superfast"} onPress={()=>segmentClicked("Superfast")} activeOpacity={0.6}>
+                    <TouchableOpacity style={styles.view2_1} onPress={()=>segmentClicked("Superfast")} activeOpacity={0.6}>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <FontAwesome name={delMode=="Superfast" ? "dot-circle-o":"circle-thin"} size={26} color="#fdb915" />
                             <View style={{flexWrap:"wrap",marginLeft:30}}>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         borderTopRightRadius:30,
         backgroundColor:"#fdb915",
+        paddingVertical:15
     },
     view1: {
         textAlign:"center",
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
         color:"#000"
     },
     txtUpdate: {
-        marginVertical:15,
+        // marginVertical:15,
         color:"#fff",
         fontWeight:"bold",
         fontSize:15

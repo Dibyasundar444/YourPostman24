@@ -16,9 +16,9 @@ const { width } = Dimensions.get("window");
 
 
 export default function ConfirmInfoScreen(
-    {onSubmit,delMode,setDelMode,sLocation,rLocation,
-    courierType,secured,cHeight,cInfo,cLength,cWidth,cWeight,
-    rName,usualRate,fastDel_Rate,superFastDel_rate,INDICATOR,sName}
+    {onSubmit,delMode,setDelMode,sLocation,rLocation,courierType,
+    secured,cHeight,cInfo,cLength,cWidth,cWeight,rName,usualRate,
+    fastDel_Rate,superFastDel_rate,INDICATOR,sName,SENDER_GEO,RECEIVER_GEO}
     ){
 
     const refRBSheet = useRef();
@@ -62,7 +62,7 @@ export default function ConfirmInfoScreen(
                     </View>
                     <TouchableOpacity 
                         style={{flexDirection:"row",alignItems:"center"}}
-                        onPress={()=>navigation.navigate("Map")}
+                        onPress={()=>navigation.navigate("Map",{SENDER_GEO:SENDER_GEO,RECEIVER_GEO:RECEIVER_GEO})}
                     >
                         <FontAwesome name="location-arrow" size={18} color="#fdb915" />
                         <Text style={{color:"#fdb915",fontWeight:"bold",marginLeft:5}}>View in Map</Text>
@@ -98,7 +98,7 @@ export default function ConfirmInfoScreen(
             </View>
             <View style={{borderWidth:3,borderColor:"#e8e4e3",marginVertical:10}}/>
             <TouchableOpacity 
-                style={{marginHorizontal:20,backgroundColor:"#e8e4e3",borderRadius:30}}
+                style={{marginHorizontal:20,backgroundColor:"#e8e4e3",borderRadius:20}}
                 onPress={()=>refRBSheet.current.open()}
             >
                 <RBSheet
@@ -130,7 +130,7 @@ export default function ConfirmInfoScreen(
                         <Text style={{fontSize:18,color:"#000"}}>{delMode}</Text>
                         <View style={{flexDirection:"row",alignItems:"center"}}>
                             <Text style={{fontSize:18,marginRight:10,color:"#000"}}>₹{usualRate}</Text>
-                            <AntDesign name="caretdown" size={22} style={{top:-2}}color="gray" />
+                            {/* <AntDesign name="caretdown" size={22} style={{top:-2}}color="gray" /> */}
                         </View>
                     </View>
                     <Text style={{fontSize:18,color:"#000"}}>Delivery</Text>
@@ -141,7 +141,7 @@ export default function ConfirmInfoScreen(
                 :
                 <View style={{alignItems:"flex-end"}}>
                     <TouchableOpacity style={styles.proceed} onPress={onSubmit}>
-                        <Text style={{color:"#fff",fontSize:16}}>Proceed to payment</Text>
+                        <Text style={{color:"#fff",fontSize:16}}>Proceed to Payment</Text>
                     </TouchableOpacity>
                 </View>
             }
@@ -180,7 +180,8 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         paddingHorizontal:15,
         marginRight:20,
-        marginBottom:20
+        marginBottom:20,
+        elevation:5
     }
   });
   

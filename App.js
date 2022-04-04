@@ -16,12 +16,14 @@ import AddressScreen from "./src/Screens/Account/screens/SavedAddress";
 import LanguageScreen from "./src/Screens/Account/screens/LanguageScreen";
 import ContactScreen from "./src/Screens/Account/screens/ContactScreen";
 import T_C_Screen from "./src/Screens/Account/screens/T&C_screen";
-import PaymentScreen from "./src/Screens/ArrangeDelivey/Payment/PaymentScreen";
 import MyMap from "./src/Screens/ArrangeDelivey/Confirm/Map";
 import RateCalculator from "./src/Screens/Account/screens/RateCalculatorScreen";
 import MyDeliveries from "./src/Screens/MyDelivery";
 import OrderDetailsScreen from "./src/Screens/MyDelivery/component/OrderDetailsScreen";
 import SplashScreen from "./src/Screens/SplashScreen";
+import ChooseCustomer from "./src/Screens/ChooseCustomer";
+import PaymentMethods from "./src/Screens/ArrangeDelivey/Payment/PaymentMethods";
+import PaymentScreen from "./src/Screens/ArrangeDelivey/Payment/PaymentScreen";
 
 
 export default function App(){
@@ -71,12 +73,13 @@ export default function App(){
           <Stack.Screen name="Contact" component={ContactScreen} />
           <Stack.Screen name="Terms" component={T_C_Screen} />
           <Stack.Screen name="myDeliveries" component={MyDeliveries} />
-          <Stack.Screen name="payment" component={PaymentScreen} />
+          <Stack.Screen name="PaymentMethod" component={PaymentMethods} />
+          <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
           <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} />
           <Stack.Screen name="Map" component={MyMap} />
           {/* <Stack.Screen name="Pickup Assigned" component={PickupAssigned} /> */}
           <Stack.Screen name="RateCalculator" component={RateCalculator} />
-          {/* <Stack.Screen name="ChooseCustomer" component={ChooseCustomer} /> */}
+          <Stack.Screen name="ChooseCustomer" component={ChooseCustomer} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>

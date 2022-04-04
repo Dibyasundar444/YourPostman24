@@ -14,6 +14,16 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { 
+  LoginManager, 
+  AccessToken, 
+  GraphRequest, 
+  GraphRequestManager 
+} from 'react-native-fbsdk-next';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import { API } from "../config";
 
 
@@ -70,8 +80,82 @@ const LogIn = ({ navigation }) => {
     }
   };
 
-  const FBlogIn=()=>{};
-  const googleLogIn=()=>{};
+  const FBlogIn=()=>{
+    LoginManager
+    .logInWithPermissions(['public_profile','email'])
+    .then(function (result) {
+      if (result.isCancelled) {
+        alert('Login cancelled');
+      } else {
+        AccessToken
+          .getCurrentAccessToken()
+          .then((data) => {
+            let accessToken = data.accessToken;
+            // alert(accessToken.toString())
+
+            const responseInfoCallback = (error, result) => {
+              if (error) {
+                console.log(error)
+                // alert('Error fetching data: ' + error.toString());
+              } else {
+                // console.log(result);
+                const navData = {
+                  id: result.id,
+                  name: result.name,
+                  email: result.email,
+                  profileImg: result.picture.data.url
+                };
+                navigation.navigate('ChooseCustomer',navData);
+              }
+            }
+
+            const infoRequest = new GraphRequest('/me', {
+              accessToken: accessToken,
+              parameters: {
+                fields: {
+                  string: 'email,name,first_name,middle_name,last_name,picture.type(large)'
+                }
+              }
+            }, responseInfoCallback);
+
+            // Start the graph request.
+            new GraphRequestManager()
+              .addRequest(infoRequest)
+              .start()
+
+          })
+      }
+    }, function (error) {
+      alert('Login fail with error: ' + error);
+    });
+  }
+  const googleLogIn=()=>{
+    GoogleSignin.configure({
+      androidClientId: '564858245446-uv4sn6c7t28qtj6f0pajnstvnboksmik.apps.googleusercontent.com',
+    });
+    GoogleSignin.hasPlayServices().then((hasPlayService) => {
+      if (hasPlayService) {
+          GoogleSignin.signIn().then((userInfo) => {
+              console.log(JSON.stringify(userInfo))
+              const navData = {
+                id: userInfo.user.id,
+                name: userInfo.user.name,
+                email: userInfo.user.email,
+                profileImg: userInfo.user.photo
+              };
+              navigation.navigate('ChooseCustomer',navData);
+          })
+          .catch((e) => {
+          console.log("ERROR IS: " + JSON.stringify(e));
+          })
+      }
+      else{
+        console.log("playservice error");
+      }
+    }).catch((e) => {
+      console.log("ERROR IS: " + JSON.stringify(e));
+    })
+  };
 
   return (
     <View style={styles.container}>
@@ -181,6 +265,53 @@ const LogIn = ({ navigation }) => {
               <Text style={{ color: "#fff" }}>Google</Text>
             </TouchableOpacity>
           </View>
+          {/* <LoginButton
+            onLoginFinished={
+              (error, result) => {
+                if (error) {
+                  alert("login has error: " + result.error);
+                } else if (result.isCancelled) {
+                  alert("login is cancelled.");
+                } else {
+
+                  AccessToken.getCurrentAccessToken().then(
+                    (data) => {
+                      let accessToken = data.accessToken
+                      alert(accessToken.toString())
+
+                      const responseInfoCallback = (error, result) => {
+                        if (error) {
+                          console.log(error)
+                          alert('Error fetching data: ' + error.toString());
+                        } else {
+                          console.log(result)
+                          alert('Success fetching data: ' + result.toString());
+                        }
+                      }
+
+                      const infoRequest = new GraphRequest(
+                        '/me',
+                        {
+                          accessToken: accessToken,
+                          parameters: {
+                            fields: {
+                              string: 'email,name,first_name,middle_name,last_name'
+                            }
+                          }
+                        },
+                        responseInfoCallback
+                      );
+
+                      // Start the graph request.
+                      new GraphRequestManager().addRequest(infoRequest).start()
+
+                    }
+                  )
+
+                }
+              }
+            }
+            onLogoutFinished={() => alert("logout.")}/> */}
         </View>
       </ScrollView>
     </View>

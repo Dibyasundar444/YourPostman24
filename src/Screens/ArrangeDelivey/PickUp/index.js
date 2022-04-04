@@ -5,16 +5,32 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView from 'react-native-maps';
+import GooglePlaces from "../../GooglePlaces/GooglePlaces";
 
 
 const { width } = Dimensions.get("window");
 const { height } = Dimensions.get("window");
 
-export default function PickUPScreen({location,activeIndex,setLocation,setActiveIndex,next}){
+export default function PickUPScreen(
+    {location,activeIndex,setLocation,setActiveIndex,
+    next,HOME,OFFICE,OTHER,setPROGRESS,SET_LAT_LONG}
+    ){
 
-    
     const segmentClicked=(index)=>{
         setActiveIndex(index);
+    };
+
+    const PRESSED1=()=>{
+        segmentClicked(1);
+        setLocation(HOME);
+    };
+    const PRESSED2=()=>{
+        segmentClicked(2);
+        setLocation(OFFICE);
+    };
+    const PRESSED3=()=>{
+        segmentClicked(3);
+        setLocation(OTHER);
     };
     
     return(
@@ -22,17 +38,22 @@ export default function PickUPScreen({location,activeIndex,setLocation,setActive
             <MapView style={styles.map} initialRegion={{latitude:22.5726,longitude: 88.3639,latitudeDelta: 0.0922,longitudeDelta: 0.0421}} />
             <View style={{position:"absolute",marginTop:20,marginLeft:10,width:width/1.35}}>
                 <View style={{flexDirection:"row",alignItems:"center",elevation:5,borderRadius:30,opacity:0.99,backgroundColor:"#fff"}}>
-                    <View style={{marginRight:10,marginLeft:20}}>
+                    <View style={{marginLeft:20}}>
                         <Ionicons name="md-location-sharp" size={20} color="#fdb915" />
                     </View>
                     <View>
-                        <TextInput
+                        {/* <TextInput
                             style={styles.input}
                             onChangeText={(val)=>setLocation(val)}
                             value={location}
                             placeholder="Sender loaction..."
                             placeholderTextColor="gray"
-                            // multiline={true}
+                        /> */}
+                        <GooglePlaces 
+                            setLOCATION={setLocation}
+                            LOCATION={location}
+                            isPROGRESS={false}
+                            setLAT_LONG={SET_LAT_LONG}
                         />
                     </View>
                 </View>
@@ -44,8 +65,8 @@ export default function PickUPScreen({location,activeIndex,setLocation,setActive
                         <View style={{marginTop:10}}>
                             <TouchableOpacity 
                                 style={{flexDirection:"row",alignItems:"center"}} 
-                                onPress={()=>segmentClicked(1)}
-                                active={ activeIndex == 1 }
+                                onPress={PRESSED1}
+                                // active={ activeIndex == 1 }
                                 activeOpacity={0.6}
                             >
                                 <Entypo name="home" size={24} color="#fdb915" />
@@ -54,8 +75,8 @@ export default function PickUPScreen({location,activeIndex,setLocation,setActive
                             </TouchableOpacity>
                             <TouchableOpacity 
                                 style={{flexDirection:"row",alignItems:"center",marginVertical:20,marginLeft:3}}
-                                onPress={()=>segmentClicked(2)}
-                                active={ activeIndex == 2 }
+                                onPress={PRESSED2}
+                                // active={ activeIndex == 2 }
                                 activeOpacity={0.6}
                             >
                                 <FontAwesome  name="building-o" size={24} color="#fdb915" />
@@ -64,8 +85,8 @@ export default function PickUPScreen({location,activeIndex,setLocation,setActive
                             </TouchableOpacity>
                             <TouchableOpacity 
                                 style={{flexDirection:"row",alignItems:"center",marginBottom:30}}
-                                onPress={()=>segmentClicked(3)} 
-                                active={ activeIndex == 3 }   
+                                onPress={PRESSED3} 
+                                // active={ activeIndex == 3 }   
                                 activeOpacity={0.6}
                             >
                                 <MaterialCommunityIcons  name="warehouse" size={24} color="#fdb915" />
@@ -111,8 +132,9 @@ const styles = StyleSheet.create({
     input: {
         height: 60,
         fontSize:16,
-        marginRight:60,
-        color:"#000"
+        color:"#000",
+        borderTopRightRadius:30,
+        borderBottomRightRadius:30
     },
     map: {
         width: width,

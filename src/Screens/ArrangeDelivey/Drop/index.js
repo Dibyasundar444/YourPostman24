@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from "react-native";
+import { 
+    View, 
+    Text, 
+    TextInput, 
+    StyleSheet, 
+    Dimensions, 
+    TouchableOpacity, 
+    ScrollView, 
+    KeyboardAvoidingView 
+} from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -7,95 +16,109 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Zocial from 'react-native-vector-icons/Zocial';
 import MapView from "react-native-maps";
+import GooglePlaces from "../../GooglePlaces/GooglePlaces";
 
 const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 
 
-export default function DropScreen({drop,setDrop,name,setName,number,setNumber,next}){
+export default function DropScreen({drop,setDrop,name,setName,number,setNumber,next,SET_LAT_LONG}){
 
     const [input1, setInput1] = useState("");
+    const [progress, setProgress] = useState(false);
+
+    // console.log(progress);
     
     return(
         <View style={{overflow:"hidden",borderTopLeftRadius:20}}>
-            <MapView style={styles.map} initialRegion={{latitude:22.5726,longitude: 88.3639,latitudeDelta: 0.0922,longitudeDelta: 0.0421}} />
-            <View style={styles.view1}>
-                <View style={{marginLeft:10}}>
-                    <Ionicons name="md-location-sharp" size={20} color={"#fdb915"} />
-                </View>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(val)=>setDrop(val)}
-                        value={drop}
-                        placeholder="Receiver location..."
-                        placeholderTextColor="gray"
-                        // multiline={true}
-                    />
-                </View>
-            </View>
             <View>
-                <View style={styles.view3}>
-                    <View style={{marginHorizontal:30}}>
-                        <FontAwesome name="location-arrow" color={"#fdb915"} size={22}/>
+                <MapView style={styles.map} initialRegion={{latitude:22.5726,longitude: 88.3639,latitudeDelta: 0.0922,longitudeDelta: 0.0421}} />
+                <View style={styles.view1}>
+                    <View style={{marginLeft:10}}>
+                        <Ionicons name="md-location-sharp" size={20} color={"#fdb915"} />
                     </View>
-                    <View style={{marginRight:80}}>
-                        <Text style={{flexWrap:"wrap",color:"#000"}}>{drop=="" ? "Receiver location" : drop}</Text>
-                    </View>
-                </View>
-                <View style={{}}>
-                    <View style={{marginHorizontal:20,marginTop:20}}>
-                        <View style={[styles.subView1,{backgroundColor:"#e8e4e3"}]}>
-                            <View style={{marginRight:10,marginLeft:20}}>
-                                <Entypo name="star" color={"#fdb915"} size={20}/>
-                            </View>
-                            <View>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={(val)=>setInput1(val)}
-                                    value={input1}
-                                    placeholder="City Garden"
-                                    placeholderTextColor="gray"
-                                />
-                            </View>
-                        </View>
-                        <View style={[styles.subView1,{marginTop:10,backgroundColor:"#e8e4e3"}]}>
-                            <View style={{marginRight:10,marginLeft:20}}>
-                                <MaterialIcons  name="person" size={22} color="#fdb915" />
-                            </View>
-                            <View>
-                                <TextInput
-                                    style={styles.input1}
-                                    onChangeText={(val)=>setName(val)}
-                                    value={name}
-                                    placeholder="Name of Person"
-                                    placeholderTextColor="gray"
-                                />
-                            </View>
-                            <MaterialCommunityIcons  name="contacts" size={22} color="#fdb915" />
-                        </View>
-                        <View style={[styles.subView1,{marginTop:10,backgroundColor:"#e8e4e3"}]}>
-                            <View style={{marginRight:10,marginLeft:20}}>
-                                <Zocial name="call" size={22} color="#fdb915" />
-                            </View>
-                            <View>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={(val)=>setNumber(val)}
-                                    value={number}
-                                    placeholder="Contact Number"
-                                    keyboardType="number-pad"
-                                    placeholderTextColor="gray"
-                                />
-                            </View>
-                        </View>
-                        <View style={{alignItems:"flex-end"}}>
-                            <TouchableOpacity style={styles.continue} onPress={next}>
-                                <Text style={{color:"#fff",fontSize:16}}>Continue ↓</Text>
-                            </TouchableOpacity>
-                        </View>
+                    <View>
+                        <GooglePlaces 
+                            setLOCATION={setDrop}
+                            LOCATION={drop}
+                            isPROGRESS={true}
+                            setPROGRESS={setProgress}
+                            setLAT_LONG={SET_LAT_LONG}
+                        />
                     </View>
                 </View>
+                <ScrollView 
+                    style={{
+                        position:"absolute",
+                        top:progress ? 250 : 200,
+                        bottom:0,left:0,right:0,
+                        overflow:"hidden",backgroundColor:"transparent",
+                        borderTopLeftRadius:25,borderTopRightRadius:25
+                    }} 
+                    // contentContainerStyle={{paddingBottom:120}}
+                >
+                    <View style={styles.view3}>
+                        <View style={{marginHorizontal:30}}>
+                            <FontAwesome name="location-arrow" color={"#fdb915"} size={22}/>
+                        </View>
+                        <View style={{marginRight:80}}>
+                            <Text style={{flexWrap:"wrap",color:"#000"}}>{drop=="" ? "Receiver location" : drop}</Text>
+                        </View>
+                    </View>
+                    <View style={{backgroundColor:"#fff",paddingBottom:height}}>
+                        <View style={{marginHorizontal:20,marginTop:20}}>
+                            <View style={[styles.subView1,{backgroundColor:"#e8e4e3"}]}>
+                                <View style={{marginRight:10,marginLeft:20}}>
+                                    <Entypo name="star" color={"#fdb915"} size={20}/>
+                                </View>
+                                <View>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={(val)=>setInput1(val)}
+                                        value={input1}
+                                        placeholder="Area"
+                                        placeholderTextColor="gray"
+                                    />
+                                </View>
+                            </View>
+                            <View style={[styles.subView1,{marginTop:10,backgroundColor:"#e8e4e3"}]}>
+                                <View style={{marginRight:10,marginLeft:20}}>
+                                    <MaterialIcons  name="person" size={22} color="#fdb915" />
+                                </View>
+                                <View>
+                                    <TextInput
+                                        style={styles.input1}
+                                        onChangeText={(val)=>setName(val)}
+                                        value={name}
+                                        placeholder="Name of Person"
+                                        placeholderTextColor="gray"
+                                    />
+                                </View>
+                                <MaterialCommunityIcons  name="contacts" size={22} color="#fdb915" />
+                            </View>
+                            <View style={[styles.subView1,{marginTop:10,backgroundColor:"#e8e4e3"}]}>
+                                <View style={{marginRight:10,marginLeft:20}}>
+                                    <Zocial name="call" size={22} color="#fdb915" />
+                                </View>
+                                <View>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={(val)=>setNumber(val)}
+                                        value={number}
+                                        placeholder="Contact Number"
+                                        keyboardType="number-pad"
+                                        placeholderTextColor="gray"
+                                    />
+                                </View>
+                            </View>
+                            <View style={{alignItems:"flex-end"}}>
+                                <TouchableOpacity style={styles.continue} onPress={next}>
+                                    <Text style={{color:"#fff",fontSize:16}}>Continue ↓</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </ScrollView>
             </View>
         </View>
     );
@@ -107,17 +130,18 @@ const styles = StyleSheet.create({
         fontSize:16,
         marginRight:50,
         paddingLeft:10,
-        color:"#000"
+        color:"#000",
+        width:width/2
     },
     input1: {
         height: 60,
         fontSize: 16,
         width: width/2.2,
-        color:"#000"
+        color:"#000",
     },
     map: {
         width: width,
-        height: height/2.8
+        height: height,
     },
     continue: {
         backgroundColor:"#fdb915",
@@ -163,7 +187,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius:25,
         borderTopLeftRadius:25,
         backgroundColor:"#e8e4e3",
-        marginTop:-20,
+        // marginTop:-20,
         flexDirection:"row",
         paddingVertical:20,
         alignItems:"center"

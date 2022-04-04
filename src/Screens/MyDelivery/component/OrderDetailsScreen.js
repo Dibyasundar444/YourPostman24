@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView } from "react-native";
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    Dimensions, 
+    TouchableOpacity, 
+    Image, 
+    ScrollView 
+} from "react-native";
 import MapView from "react-native-maps";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -48,7 +56,7 @@ export default function OrderDetailsScreen({navigation}){
                 <ScrollView style={{}} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingTop:250}}>
                     <View style={[styles.floatSubView1,{marginTop:10}]}>
                         <View>
-                            <Image source={require("../../../assets/image/profile.jpg")} style={styles.floatSubView1_1}/>
+                            <Image source={require("../../../assets/image/profile1.jpg")} style={styles.floatSubView1_1}/>
                         </View>
                         <View style={{alignItems:"center"}}>
                             <Text style={{fontSize:18,color:"#000"}}>James Haydon</Text>

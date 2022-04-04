@@ -43,10 +43,12 @@ export default function ProfileScreen({ navigation, route }) {
   const [uploading, setUploading] = useState(false);
   const [edit, setEdit] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [token, setToken] = useState(null);
+  const [userData, setUserData] = useState({});
   const [processRate, setProcessRate] = useState("");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState(false);
+
+  console.log(userData);
 
   useEffect(()=>{
     user();
@@ -57,9 +59,9 @@ export default function ProfileScreen({ navigation, route }) {
       let userData = await AsyncStorage.getItem('jwt');         
       let data = JSON.parse(userData);
       if(data !== null){
-        setToken(data.access_token);
+        setUserData(data);
       }else{
-        setToken(null);
+        setUserData({});
       }
     }
     catch(err){
@@ -146,12 +148,36 @@ export default function ProfileScreen({ navigation, route }) {
                   let axiosConfig = {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8',
-                        "Authorization": token
+                        "Authorization": userData.access_token
                     }
                   };
                   axios.patch(`${API}/user/update`,{profileImg:url},axiosConfig)
-                  .then(res=>{
+                  .then( async (res) => {
                     console.log(res.data);
+                    let DATA = {
+                      "access_token": userData.access_token,
+                       "msg": userData.msg,
+                       "user": 
+                       {
+                          "__v": userData.user.__v, 
+                          "_id": userData.user._id, 
+                          "businessCustomer": userData.user.businessCustomer, 
+                          "createdAt": userData.user.createdAt, 
+                          "email": userData.user.email, 
+                          "name": userData.user.name, 
+                          "password": userData.user.password, 
+                          "phoneNo": userData.user.phoneNo, 
+                          "profileImg": url, 
+                          "role": userData.user.role, 
+                          "updatedAt": userData.user.updatedAt
+                      }
+                    }
+                    try{
+                      await AsyncStorage.setItem('jwt',JSON.stringify(DATA));
+                    }
+                    catch(err){
+                      console.log("update error of storage");
+                    }
                     setUploading(false);
                     setSuccess(true);
                     setError(false);

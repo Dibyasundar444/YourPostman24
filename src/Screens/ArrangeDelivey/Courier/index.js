@@ -44,7 +44,7 @@ export default function CourierScreen({cType,setCType,Height, setHeight,Width, s
             <ScrollView 
                 showsVerticalScrollIndicator={false}
                 style={{borderTopLeftRadius:20}}
-                contentContainerStyle={{paddingBottom:150}}
+                contentContainerStyle={{paddingBottom:300}}
             >
                 <View style={{marginHorizontal:20,marginTop:20}}>
                     <View style={{marginTop:10}}>
@@ -174,6 +174,8 @@ export default function CourierScreen({cType,setCType,Height, setHeight,Width, s
                             <Switch 
                                 value={switchValue}
                                 onValueChange={toggle}
+                                thumbColor={switchValue ? "#fdb915" : "#fff"}
+                                trackColor="#aaa"
                             />
                         </View>
                     </View>
@@ -182,7 +184,7 @@ export default function CourierScreen({cType,setCType,Height, setHeight,Width, s
                 <View style={{marginTop:10,marginLeft:20}}>
                     <Text style={{fontWeight:"bold",color:"#000"}}>Courier Details</Text>
                     <View style={{marginTop:10,marginBottom:20}}>
-                        <View style={{flexDirection:"row",alignItems:"center",marginBottom:20}}>
+                        {/* <View style={{flexDirection:"row",alignItems:"center",marginBottom:20}}>
                             <Text style={{marginRight:10,color:"gray",fontWeight:"bold"}}>Product Value</Text>
                             <TextInput 
                                 placeholder="Price"
@@ -193,7 +195,7 @@ export default function CourierScreen({cType,setCType,Height, setHeight,Width, s
                                 keyboardType="numeric"
                             />
                             <Text style={{fontSize:18,marginLeft:10}}>₹</Text>
-                        </View>
+                        </View> */}
                         <TextInput 
                             placeholder="Enter courier info (i.e. things in package)"
                             placeholderTextColor="gray"
@@ -228,16 +230,16 @@ const styles = StyleSheet.create({
         backgroundColor:"#e8e4e3"
     },
     index: {
-        width:80,
-        backgroundColor:"#e8e8e8",
+        width:85,
+        backgroundColor:"#fff",
         alignItems:"center",
-        marginRight:5,
+        // marginRight:5,
         height:40,
         justifyContent:"center",
         borderRadius:20,
         elevation:9,
         borderWidth: 1,
-        borderColor: "#aaa"
+        borderColor: "#e8e8e8"
     },
     setIndex: {
         backgroundColor: "#fdb915",

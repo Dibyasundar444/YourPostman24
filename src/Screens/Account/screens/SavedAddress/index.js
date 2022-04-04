@@ -104,18 +104,20 @@ export default function AddressScreen({navigation}){
                 "name": name1,
                 "phoneNo": number1
             };
-            const submitHomeAddress=()=>{
+            const submitHomeAddress=async()=>{
                 setIndicator1(true);
-                axios.patch(`${API}/update`,postData,axiosConfig)
-                .then( async (res) => {
-                    console.log(res.data);
+                // axios.patch(`${API}/user/update`,postData,axiosConfig)
+                // .then( async (res) => {
+                //     console.log(res.data);
                     await AsyncStorage.setItem("Home",JSON.stringify(postData));
-                    setIndicator1(false);
-                })
-                .catch(e=>{
-                    console.log(e);
-                    // setIndicator1(false);
-                }) 
+                    setTimeout(() => {
+                        setIndicator1(false);
+                    }, 2000);
+                // })
+                // .catch(e=>{
+                //     console.log(e);
+                //     setIndicator1(false);
+                // }) 
             }
             return(
                 <RenderScreen 
@@ -142,18 +144,20 @@ export default function AddressScreen({navigation}){
                 "name": name2,
                 "phoneNo": number2
             };
-            const submitOfficeAddress=()=>{
+            const submitOfficeAddress=async()=>{
                 setIndicator2(true);
-                axios.patch(`${API}/update`,postData,axiosConfig)
-                .then( async (res) => {
-                    console.log({"officeAdrs":res.data});
+                // axios.patch(`${API}/update`,postData,axiosConfig)
+                // .then( async (res) => {
+                //     console.log({"officeAdrs":res.data});
                     await AsyncStorage.setItem("Office",office);
-                    setIndicator2(false);
-                })
-                .catch(e=>{
-                    console.log(e);
-                    // setIndicator2(false);
-                }) 
+                    setTimeout(() => {
+                        setIndicator2(false);
+                    }, 2000);
+                // })
+                // .catch(e=>{
+                //     console.log(e);
+                //     // setIndicator2(false);
+                // }) 
             }
             return(
                 <RenderScreen 
@@ -180,18 +184,20 @@ export default function AddressScreen({navigation}){
                 "name": name3,
                 "phoneNo": number3
             };
-            const submitOtherAddress=()=>{
+            const submitOtherAddress=async()=>{
                 setIndicator3(true);
-                axios.patch(`${API}/update`,postData,axiosConfig)
-                .then( async (res) => {
-                    console.log({"otherAdrs":res.data});
+                // axios.patch(`${API}/update`,postData,axiosConfig)
+                // .then( async (res) => {
+                //     console.log({"otherAdrs":res.data});
                     await AsyncStorage.setItem("Others",other);
-                    setIndicator3(false);
-                })
-                .catch(e=>{
-                    console.log(e);
-                    // setIndicator3(false);
-                })  
+                    setTimeout(() => {
+                        setIndicator3(false);
+                    }, 2000);
+                // })
+                // .catch(e=>{
+                //     console.log(e);
+                //     // setIndicator3(false);
+                // })  
             }
             return(
                 <RenderScreen 

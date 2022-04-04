@@ -44,13 +44,13 @@ function Home({ navigation }) {
               style={styles.image4}
             ></Image>
             <TouchableOpacity style={styles.button2} 
-            onPress={()=>navigation.navigate("ArrangeDelivery")} activeOpacity={0.8}>
+            onPress={()=>navigation.navigate("ArrangeDelivery",userData)} activeOpacity={0.8}>
               <View style={styles.image5Row}>
                 <Image
                   source={require("../assets/image/home1.png")}
                   resizeMode="contain"
                   style={styles.image5}
-                ></Image>
+                />
                 <View style={styles.arrangeDeliveryColumn}>
                   <Text style={styles.arrangeDelivery}>Arrange Delivery</Text>
                   <Text style={styles.loremIpsum}>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   button2: {
     top: 290,
     left: 15,
-    // width: 345,
+    width: "90%",
     // height: 100,
     position: "absolute",
     backgroundColor: "rgba(254,254,254,1)",
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     // marginTop: 15,
   },
   arrangeDeliveryColumn: {
-    width: 195,
+    // width: 195,
     marginLeft: 19,
     marginTop: 12,
     marginBottom: 9,
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   rect4: {
     top: 0,
     left: 0,
-    width: 375,
+    width: "100%",
     height: 235,
     position: "absolute",
     backgroundColor: "rgba(255,255,255,1)",
